@@ -1,12 +1,13 @@
 using GraphQL.Net5.Data;
 using GraphQL.Net5.GraphQ;
+using GraphQL.Server.Ui.Voyager;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+
 
 namespace GraphQL.Net5
 {
@@ -19,7 +20,7 @@ namespace GraphQL.Net5
         }
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<AppDbContext>(option =>
+            services.AddPooledDbContextFactory<AppDbContext>(option =>
             {
                 option.UseSqlServer(Configuration.GetConnectionString("Default"));
             });
@@ -41,6 +42,13 @@ namespace GraphQL.Net5
             {
                 endpoints.MapGraphQL();
             });
+
+            app.UseGraphQLVoyager(new GraphQLVoyagerOptions()
+            {
+                GraphQLEndPoint = "/graphql",
+                Path = "/graphql-voyager"
+            });
+
         }
     }
 }
