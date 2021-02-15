@@ -1,4 +1,5 @@
 using GraphQL.Net5.Data;
+using GraphQL.Net5.GraphQ;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -22,6 +23,10 @@ namespace GraphQL.Net5
             {
                 option.UseSqlServer(Configuration.GetConnectionString("Default"));
             });
+
+            services
+            .AddGraphQLServer()
+            .AddType<Query>();
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -34,10 +39,7 @@ namespace GraphQL.Net5
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Hello World!");
-                });
+                endpoints.MapGraphQL();
             });
         }
     }
