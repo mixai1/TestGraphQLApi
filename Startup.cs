@@ -27,7 +27,8 @@ namespace GraphQL.Net5
 
             services
             .AddGraphQLServer()
-            .AddType<Query>();
+            .AddType<Query>()
+            .AddProjections();
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
